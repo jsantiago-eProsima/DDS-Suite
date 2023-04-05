@@ -35,7 +35,7 @@ jobs:
         run: |
           mkdir -p .github/workflows
           wget \
-            https://raw.githubusercontent.com/eProsima/DDS-Suite/main/.github/workflows/track_dependencies.py \
+            https://raw.githubusercontent.com/jsantiago-eProsima/DDS-Suite/eprosima-dds-suite/.github/workflows/track_dependencies.py \
             -O .github/workflows/track_dependencies.py
           mkdir -p .git/info
           echo ".github/workflows/track_dependencies.py" >> .git/info/exclude
@@ -43,10 +43,11 @@ jobs:
       - name: Update dependencies
         id: update_dependencies
         run: |
+          echo dds-suite.repos
           echo "updated=$(python3 .github/workflows/track_dependencies.py \
             --token ${{ secrets.DDS_SUITE_PRIVATE_TOKEN }} \
             --repos_file dds-suite.repos \
-            --branch matrix.tracked_branch \
+            --branch ${{ matrix.tracked_branch }} \
             --output_file dds-suite.repos)" >> $GITHUB_OUTPUT
 
       - name: Create pull request
