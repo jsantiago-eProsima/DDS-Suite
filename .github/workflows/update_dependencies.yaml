@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - id: list-branches
-        run: echo "branches=$(python3 .github/workflows/list_branches.py --token ${{ secrets.RICHIPROSIMA_DDS_SUITE_TOKEN }})" >> $GITHUB_OUTPUT
+        run: echo "branches=$(python3 .github/workflows/list_branches.py --token ${{ secrets.DDS_SUITE_PRIVATE_TOKEN }})" >> $GITHUB_OUTPUT
 
     outputs:
       branches: ${{ steps.list-branches.outputs.branches }}
@@ -44,7 +44,7 @@ jobs:
         id: update_dependencies
         run: |
           echo "updated=$(python3 .github/workflows/track_dependencies.py \
-            --token ${{ secrets.RICHIPROSIMA_DDS_SUITE_TOKEN }} \
+            --token ${{ secrets.DDS_SUITE_PRIVATE_TOKEN }} \
             --repos_file dds-suite.repos \
             --branch matrix.tracked_branch \
             --output_file dds-suite.repos)" >> $GITHUB_OUTPUT
@@ -52,9 +52,9 @@ jobs:
       - name: Create pull request
         uses: peter-evans/create-pull-request@v4
         with:
-          token: ${{ secrets.RICHIPROSIMA_DDS_SUITE_TOKEN }}
-          committer: eProsima <ricardogonzalez@eprosima.com>
-          author: eProsima <ricardogonzalez@eprosima.com>
+          token: ${{ secrets.DDS_SUITE_PRIVATE_TOKEN }}
+          committer: eProsima <javiersantiago@eprosima.com>
+          author: eProsima <javiersantiago@eprosima.com>
           commit-message: Update ${{ matrix.tracked_branch }} dependencies
           signoff: true
           title: Update ${{ matrix.tracked_branch }} dependencies
@@ -63,4 +63,4 @@ jobs:
             * ${{ steps.update_dependencies.outputs.updated }}
           branch: feature/update-${{ matrix.tracked_branch }}
           base: ${{ matrix.tracked_branch }}
-          assignees: EduPonz
+          assignees: jsantiago-eProsima
